@@ -1,0 +1,24 @@
+---
+this project:
+  yaml:
+  rich text:
+    color:
+      mm-font-color: ff0000  # HEX
+    icon:
+      mm-icon: fa-heart  # Font Awsome
+    background:
+      mm-background: 0000ff  # HEX
+    allinment:
+  d3j:
+  tooling:
+    GitHub:
+      mm-hyperlink: https://github.com/kisst/mindmap
+  MVP:
+    It works:
+  Design principals:
+    Data + View should be split:
+    Source data should be human editable:
+    Option to share view:
+    data should version controlled:
+  Implementation:
+    In progress:

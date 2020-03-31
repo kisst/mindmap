@@ -1,0 +1,26 @@
+---
+name: this project
+children:
+  - name: yaml
+  - name: rich text
+    children:
+      - name: color
+      - name: icon
+      - name: background
+      - name: allinment
+  - name: d3j
+  - name: tooling
+    children:
+      - name: GitHub
+  - name: MVP
+    children:
+      - name: It works
+  - name: Design principals
+    children:
+      - name: Data + View should be split
+      - name: Source data should be human editable
+      - name: Option to share view
+      - name: data should version controlled
+  - name: Implementation
+    children:
+      - name: In progress
