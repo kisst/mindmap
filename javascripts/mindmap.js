@@ -25,9 +25,25 @@ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
+function getUrlVars() {
+	    var vars = {};
+	    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		            vars[key] = value;
+		        });
+	    return vars;
+	}
 
+function getUrlParam(parameter, defaultvalue){
+    var urlparameter = defaultvalue;
+    if(window.location.href.indexOf(parameter) > -1){
+        urlparameter = getUrlVars()[parameter];
+        }
+    return urlparameter;
+}
 
-treeData = YAML.load('data.yaml');
+var src_data = getUrlParam('src_data','data.yaml');
+
+treeData = YAML.load(src_data);
 
   // Get JSON data
   // treeJSON = d3.json("data-sideloaded.yaml", function(error, treeData) {
