@@ -20,6 +20,22 @@ children:
       - name: Data + View should be split
       - name: Source data should be human editable
       - name: Option to share view
+        children:
+          - name: Foo
+            children:
+              - name: Foo A
+              - name: Foo B
+              - name: Foo C
+          - name: Bar
+            children:
+              - name: Bar A
+              - name: Bar B
+              - name: Bar C
+          - name: Zulu
+            children:
+              - name: Zulu A
+              - name: Zulu B
+              - name: Zulu C
       - name: data should version controlled
   - name: Implementation
     children:

@@ -28,12 +28,59 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 const urlParams = new URLSearchParams(window.location.search);
 const getUrlParam = (param, def) => urlParams.get(param) || def;
 
-const src_data = getUrlParam('src_data', 'data.yaml');
+/**
+ * Normalize the label, returning a string to be used as a unique identifier.
+ */
+function getNodeId(label) {
+  return label.toLowerCase().replace(/[^\w]/g, '-').replace(/\-{2,}/g, '-');
+}
 
-treeData = YAML.load(src_data);
+/**
+ * Return a random 5-digit 36-bit string.
+ */
+function getRandomId() {
+  return Math.random().toString(36).substring(2, 7);
+}
 
-// Get JSON data
-// treeJSON = d3.json("data-sideloaded.yaml", function(error, treeData) {
+/**
+ * Recurse through the tree, generating IDs for all nodes missing them
+ */
+function addIds(parent) {
+  const { children } = parent;
+
+  if (!children || children.length === 0) {
+    return;
+  }
+
+  const ids = new Set();
+
+  return children.forEach((child) => {
+    if (child.id) {
+      return;
+    }
+
+    let id = getNodeId(child.name);
+
+    if (ids.has(id)) {
+      id = getRandomId();
+    }
+
+    ids.add(id);
+    child.id = id;
+    addIds(child)
+  });
+}
+
+/**
+ * Parse the given YAML file, adding IDs as necessary.
+ */
+function parseTree(srcYaml) {
+  const data = YAML.load(srcYaml);
+  addIds(data);
+  return data;
+}
+
+const treeData = parseTree(getUrlParam('src_data', 'data.yaml'));
 
 // Calculate total nodes, max label length
 var totalNodes = 0;
@@ -550,7 +597,43 @@ root = treeData;
 root.x0 = viewerHeight / 2;
 root.y0 = 0;
 
+/**
+ * Iterate over each of the children of the given node, hiding all not
+ * matching the path given by `toMatch`
+ */
+function hideInitialNodes(node, toMatch) {
+  const current = toMatch[0];
+
+  if (!current) {
+    return;
+  }
+
+  node.children.forEach((child) => {
+    if (child.id === current) {
+      hideInitialNodes(child, toMatch.slice(1));
+    } else {
+      toggleChildren(child);
+    }
+  });
+}
+
+/**
+ * If an `initial` query parameter is given, hide all nodes from the root
+ * which don't match
+ */
+function processInitialNodes(root) {
+  const initial = getUrlParam('initial');
+
+  if (!initial) {
+    return;
+  }
+
+  const toMatch = initial.trim().split('.');
+  hideInitialNodes(root, toMatch);
+}
+
 // Layout the tree initially and center on the root node.
+processInitialNodes(root);
 update(root);
 centerNode(root);
 
