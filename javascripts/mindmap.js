@@ -25,23 +25,10 @@ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
-function getUrlVars() {
-  var vars = {};
-  var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
-    vars[key] = value;
-  });
-  return vars;
-}
+const urlParams = new URLSearchParams(window.location.search);
+const getUrlParam = (param, def) => urlParams.get(param) || def;
 
-function getUrlParam(parameter, defaultvalue) {
-  var urlparameter = defaultvalue;
-  if (window.location.href.indexOf(parameter) > -1) {
-    urlparameter = getUrlVars()[parameter];
-  }
-  return urlparameter;
-}
-
-var src_data = getUrlParam('src_data', 'data.yaml');
+const src_data = getUrlParam('src_data', 'data.yaml');
 
 treeData = YAML.load(src_data);
 
