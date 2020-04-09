@@ -3,16 +3,20 @@ this project:
   yaml:
   rich text:
     color:
-      mm-font-color: ff0000  # HEX
+      __attrs:
+        font-color: ff0000  # HEX
     icon:
-      mm-icon: fa-heart  # Font Awsome
+      __attrs:
+        icon: fa-heart  # Font Awsome
     background:
-      mm-background: 0000ff  # HEX
-    allinment:
+      __attrs:
+        background: 0000ff  # HEX
+    alignment:
   d3j:
   tooling:
     GitHub:
-      mm-hyperlink: https://github.com/kisst/mindmap
+      __attrs:
+        hyperlink: https://github.com/kisst/mindmap
   MVP:
     It works:
   Design principals:

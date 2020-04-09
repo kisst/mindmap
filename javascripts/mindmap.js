@@ -43,44 +43,57 @@ function getRandomId() {
 }
 
 /**
- * Recurse through the tree, generating IDs for all nodes missing them
+ * Normalize the raw YAML data into a tree structure expected by Mindmap.
+ *
+ * Recurse through the input object, converting the map into an array, with
+ * each key, value pairing translated into a single { name, children } object.
  */
-function addIds(parent) {
-  const { children } = parent;
-
-  if (!children || children.length === 0) {
-    return;
+function normalize(parent) {
+  if (!parent) {
+    return []
   }
 
+  // Ensure that the generated IDs are unique within the parent scope.
   const ids = new Set();
 
-  return children.forEach((child) => {
-    if (child.id) {
-      return;
-    }
+  return Object
+    // Transform the object into an array
+    .entries(parent)
+    // Ignore any __ attributes - these should be considered private
+    .filter(([name]) => !name.startsWith('__'))
+    // Translate each entry into a { name, child } object
+    // Recurse through the levels
+    .map(([name, rawChildren]) => {
+      const attrs = rawChildren?.__attrs || {};
+      const child = {
+        name,
+        attrs,
+        id: attrs.id || getNodeId(name),
+        children: normalize(rawChildren),
+      };
 
-    let id = getNodeId(child.name);
+      // TODO: Parse __attrs
 
-    if (ids.has(id)) {
-      id = getRandomId();
-    }
+      if (ids.has(child.id)) {
+        child.id = getRandomId();
+      }
 
-    ids.add(id);
-    child.id = id;
-    addIds(child)
-  });
+      ids.add(child.id);
+      return child;
+    });
 }
 
 /**
  * Parse the given YAML file, adding IDs as necessary.
  */
 function parseTree(srcYaml) {
-  const data = YAML.load(srcYaml);
-  addIds(data);
-  return data;
+  const rawData = YAML.load(srcYaml);
+  const parsed = normalize(rawData);
+  const root = parsed[0];
+  return root;
 }
 
-const treeData = parseTree(getUrlParam('src_data', 'data.yaml'));
+const treeData = parseTree(getUrlParam('src_data', 'data-to-be.yaml'));
 
 // Calculate total nodes, max label length
 var totalNodes = 0;
