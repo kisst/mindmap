@@ -612,27 +612,43 @@ root.y0 = 0;
 
 /**
  * Iterate over each of the children of the given node, hiding all not
- * matching the path given by `toMatch`
+ * matching the path given by `toMatch`. This method is called recursively from
+ * the root, and returns the node which matches the initial query when found.
  */
 function hideInitialNodes(node, toMatch) {
   const current = toMatch[0];
+  let initial;
 
-  if (!current) {
-    return;
+  // We're yet to reach our initial node - recurse through the children until we do
+  if (current) {
+    node.children.forEach((child) => {
+      // This child is an ancestor of our initial node
+      // Recurse through its children
+      if (child.id === current) {
+        const newInitial = hideInitialNodes(child, toMatch.slice(1));
+
+        // Capture the initial node from the child call and bubble it up
+        if (newInitial) {
+          initial = newInitial;
+        }
+      } else {
+        // This child is not an ancestor of our initial node
+        // Hide all of its children
+        toggleChildren(child);
+      }
+    });
+    // We've found our initial node, mark it
+  } else {
+    initial = node;
   }
 
-  node.children.forEach((child) => {
-    if (child.id === current) {
-      hideInitialNodes(child, toMatch.slice(1));
-    } else {
-      toggleChildren(child);
-    }
-  });
+  // Return the initial node if found
+  return initial;
 }
 
 /**
  * If an `initial` query parameter is given, hide all nodes from the root
- * which don't match
+ * which don't match, and center it.
  */
 function processInitialNodes(root) {
   const initial = getUrlParam('initial');
@@ -642,11 +658,12 @@ function processInitialNodes(root) {
   }
 
   const toMatch = initial.trim().split('.');
-  hideInitialNodes(root, toMatch);
+  const initialNode = hideInitialNodes(root, toMatch);
+  return initialNode || root;
 }
 
-// Layout the tree initially and center on the root node.
-processInitialNodes(root);
+// Layout the tree and center on the initial node.
+const initial = processInitialNodes(root);
 update(root);
-centerNode(root);
+centerNode(initial);
 
