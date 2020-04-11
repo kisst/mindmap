@@ -424,6 +424,16 @@ function toggleChildren(d) {
 
 function click(d) {
   if (d3.event.defaultPrevented) return; // click suppressed
+
+  const { hyperlink } = d?.attrs;
+
+  // If the node has a hyperlink - navigate to it on click
+  // If the CTRL key is held down, ignore and toggle the node as per-default
+  if (hyperlink && !d3.event.ctrlKey) {
+    window.open(hyperlink, '_blank');
+    return;
+  }
+
   d = toggleChildren(d);
   update(d);
   centerNode(d);
