@@ -1,42 +1,31 @@
 ---
-name: this project
-children:
-  - name: yaml
-  - name: rich text
-    children:
-      - name: color
-      - name: icon
-      - name: background
-      - name: allinment
-  - name: d3j
-  - name: tooling
-    children:
-      - name: GitHub
-  - name: MVP
-    children:
-      - name: It works
-  - name: Design principals
-    children:
-      - name: Data + View should be split
-      - name: Source data should be human editable
-      - name: Option to share view
-        children:
-          - name: Foo
-            children:
-              - name: Foo A
-              - name: Foo B
-              - name: Foo C
-          - name: Bar
-            children:
-              - name: Bar A
-              - name: Bar B
-              - name: Bar C
-          - name: Zulu
-            children:
-              - name: Zulu A
-              - name: Zulu B
-              - name: Zulu C
-      - name: data should version controlled
-  - name: Implementation
-    children:
-      - name: In progress
+this project:
+  yaml:
+  rich text:
+    color:
+      __attrs:
+        font-color: ff0000  # HEX
+    icon:
+      __attrs:
+        icon: fa-heart  # Font Awsome
+    background:
+      __attrs:
+        background: 0000ff  # HEX
+    alignment:
+  d3j:
+  tooling:
+    GitHub:
+      __attrs:
+        hyperlink: https://github.com/kisst/mindmap
+      Github foo:
+      Github bar:
+      Github zulu:
+  MVP:
+    It works:
+  Design principals:
+    Data + View should be split:
+    Source data should be human editable:
+    Option to share view:
+    data should version controlled:
+  Implementation:
+    In progress:

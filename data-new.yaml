@@ -1,8 +1,0 @@
----
-name: loaded based on url parameter
-children:
-  - name: parsed
-  - name: from url
-    children:
-      - name: with
-      - name: js

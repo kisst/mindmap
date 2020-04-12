@@ -84,16 +84,48 @@ function normalize(parent) {
 }
 
 /**
+ * Attempt to match a root node from the given GET parameter.
+ */
+function matchRoot(node, toMatch) {
+  const current = toMatch[0];
+
+  if (current) {
+    const match = node.children.find(child => child.id === current);
+
+    if (match) {
+      return matchRoot(match, toMatch.slice(1));
+    } else {
+      return null;
+    }
+  } else {
+    return node;
+  }
+}
+
+/**
  * Parse the given YAML file, adding IDs as necessary.
  */
 function parseTree(srcYaml) {
   const rawData = YAML.load(srcYaml);
   const parsed = normalize(rawData);
-  const root = parsed[0];
+  const rootQuery = getUrlParam('root');
+  let root = parsed[0];
+
+  if (rootQuery) {
+    const querySplit = rootQuery.trim().split('.');
+    const rootMatch = matchRoot(root, querySplit);
+
+    if (rootMatch) {
+      return rootMatch;
+    }
+
+    console.error(`Failed to match root: ${rootQuery}`);
+  }
+
   return root;
 }
 
-const treeData = parseTree(getUrlParam('src_data', 'data-to-be.yaml'));
+const treeData = parseTree(getUrlParam('src_data', 'data.yaml'));
 
 // Calculate total nodes, max label length
 var totalNodes = 0;
