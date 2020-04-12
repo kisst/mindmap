@@ -427,11 +427,14 @@ function click(d) {
 
   const { hyperlink } = d?.attrs;
 
-  // If the node has a hyperlink - navigate to it on click
-  // If the CTRL key is held down, ignore and toggle the node as per-default
-  if (hyperlink && !d3.event.ctrlKey) {
-    window.open(hyperlink, '_blank');
-    return;
+  // If the node has a hyperlink, only toggle its children and ignore the link
+  // when the CTRL key is held down
+  if (hyperlink) {
+    if (d3.event.ctrlKey) {
+      event.preventDefault();
+    } else {
+      return;
+    }
   }
 
   d = toggleChildren(d);
@@ -529,7 +532,23 @@ function update(source) {
     .attr("text-anchor", function (d) {
       return d.children || d._children ? "end" : "start";
     })
-    .text(function (d) {
+    .html(function (d) {
+      const { attrs } = d;
+      const { hyperlink } = attrs;
+
+      if (hyperlink) {
+        // Use jQuery to create the anchor safely
+        const anchor = $('<a>')
+          .attr({
+            href: hyperlink,
+            target: '_blank',
+            class: 'hyperlink',
+          })
+          .text(d.name);
+
+        return anchor[0].outerHTML;
+      }
+
       return d.name;
     });
 

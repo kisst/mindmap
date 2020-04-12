@@ -36,3 +36,8 @@
 .ghostCircle, .activeDrag .ghostCircle{
      display: none;
 }
+
+.hyperlink {
+  fill: #0645ad;
+  text-decoration: underline;
+}
