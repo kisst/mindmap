@@ -125,7 +125,7 @@ function parseTree(srcYaml) {
   return root;
 }
 
-const treeData = parseTree(getUrlParam('src_data', 'data-to-be.yaml'));
+const treeData = parseTree(getUrlParam('src_data', 'data.yaml'));
 
 // Calculate total nodes, max label length
 var totalNodes = 0;
