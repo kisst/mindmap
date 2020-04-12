@@ -664,7 +664,7 @@ function processInitialNodes(root) {
   const initial = getUrlParam('initial');
 
   if (!initial) {
-    return;
+    return root;
   }
 
   const toMatch = initial.trim().split('.');
