@@ -7,7 +7,7 @@ this project:
         color: ff0000  # HEX
     icon:
       __attrs:
-        icon: fa-heart  # Font Awesome
+        icon: heart  # Font Awesome
     background:
       __attrs:
         background: 0000ff  # HEX

@@ -125,6 +125,30 @@ function parseTree(srcYaml) {
   return root;
 }
 
+/**
+ * Attempt to return the character corresponding to a Font Awesome icon.
+ */
+function getFontIcon(iconName) {
+  // Create an element outside of the SVG - assign it the given FA class
+  const tmpElem = document.createElement('i');
+  tmpElem.classList.add('fa', `fa-${iconName}`);
+  document.body.append(tmpElem);
+
+  // Retrieve the unicode code point from the icon, then delete the element
+  const content = window
+    .getComputedStyle(tmpElem, '::before')
+    .getPropertyValue('content');
+
+  tmpElem.remove();
+
+  // Display a question mark if unable to parse the icon
+  const charCode = content === 'none'
+    ? '61529'
+    : content.charCodeAt(1);
+
+  return String.fromCharCode(charCode);
+}
+
 const treeData = parseTree(getUrlParam('src_data', 'data.yaml'));
 
 // Calculate total nodes, max label length
@@ -574,8 +598,14 @@ function update(source) {
       return null;
     })
     .html(function (d) {
+      let text = d.name;
       const { attrs } = d;
-      const { hyperlink } = attrs;
+      const { hyperlink, icon } = attrs;
+
+      // Prepend a font-based icon if provided
+      if (icon) {
+        text = `${getFontIcon(icon)} ${text}`;
+      }
 
       if (hyperlink) {
         // Use jQuery to create the anchor safely
@@ -585,12 +615,12 @@ function update(source) {
             target: '_blank',
             class: 'hyperlink',
           })
-          .text(d.name);
+          .text(text);
 
         return anchor[0].outerHTML;
       }
 
-      return d.name;
+      return text;
     });
 
   // Add a `rect` to provide a background to all applicable nodes
