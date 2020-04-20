@@ -564,6 +564,15 @@ function update(source) {
     .attr("text-anchor", function (d) {
       return d.children || d._children ? "end" : "start";
     })
+    .style('fill', (node) => {
+      const { color } = node.attrs;
+
+      if (color) {
+        return `#${color}`;
+      }
+
+      return null;
+    })
     .html(function (d) {
       const { attrs } = d;
       const { hyperlink } = attrs;
@@ -583,6 +592,28 @@ function update(source) {
 
       return d.name;
     });
+
+  // Add a `rect` to provide a background to all applicable nodes
+  node
+    .filter(d => !!d.attrs.background)
+    .append('rect')
+    .each(function (d) {
+      const parent = this.parentElement;
+      const parentBound = parent.getBBox();
+
+      const paddingY = 1;
+      const paddingX = 2;
+
+      d3.select(this).attr({
+        fill: `#${d.attrs.background}`,
+        x: parentBound.x - paddingX,
+        y: parentBound.y - paddingY,
+        width: parentBound.width + (paddingX * 2),
+        height: parentBound.height + (paddingY * 2),
+      });
+
+      parent.insertBefore(this, parent.firstChild);
+    })
 
   // Change the circle fill depending on whether it has children and is collapsed
   node.select("circle.nodeCircle")

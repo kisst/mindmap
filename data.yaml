@@ -4,13 +4,14 @@ this project:
   rich text:
     color:
       __attrs:
-        font-color: ff0000  # HEX
+        color: ff0000  # HEX
     icon:
       __attrs:
-        icon: fa-heart  # Font Awsome
+        icon: fa-heart  # Font Awesome
     background:
       __attrs:
         background: 0000ff  # HEX
+        color: fff
     alignment:
   d3j:
   tooling:
