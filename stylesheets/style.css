@@ -8,7 +8,7 @@ body {
 }
 
 .overlay{
-    background-color:#EEE;
+  background-color:#EEE;
 }
 
 .node circle {
@@ -18,7 +18,7 @@ body {
 }
 
 .node text {
-  font-size:10px;
+  font-size: 10px;
   font-family: "FontAwesome", sans-serif;
 }
 
@@ -35,11 +35,11 @@ body {
 }
 
 .ghostCircle.show{
-    display:block;
+  display: block;
 }
 
 .ghostCircle, .activeDrag .ghostCircle{
-     display: none;
+  display: none;
 }
 
 .hyperlink {
