@@ -580,6 +580,28 @@ function update(source) {
       outCircle(node);
     });
 
+  // Add a `rect` to provide a background to all applicable nodes
+  nodeEnter
+    .filter(d => !!d.attrs.background)
+    .append('rect')
+    .each(function (d) {
+      const parent = this.parentElement;
+      const parentBound = parent.getBBox();
+
+      const paddingY = 1;
+      const paddingX = 2;
+
+      d3.select(this).attr({
+        fill: `#${d.attrs.background}`,
+        x: parentBound.x - paddingX,
+        y: parentBound.y - paddingY,
+        width: parentBound.width + (paddingX * 2),
+        height: parentBound.height + (paddingY * 2),
+      });
+
+      parent.insertBefore(this, parent.firstChild);
+    })
+
   // Update the text to reflect whether node has children or not.
   node.select('text')
     .attr("x", function (d) {
@@ -622,28 +644,6 @@ function update(source) {
 
       return text;
     });
-
-  // Add a `rect` to provide a background to all applicable nodes
-  node
-    .filter(d => !!d.attrs.background)
-    .append('rect')
-    .each(function (d) {
-      const parent = this.parentElement;
-      const parentBound = parent.getBBox();
-
-      const paddingY = 1;
-      const paddingX = 2;
-
-      d3.select(this).attr({
-        fill: `#${d.attrs.background}`,
-        x: parentBound.x - paddingX,
-        y: parentBound.y - paddingY,
-        width: parentBound.width + (paddingX * 2),
-        height: parentBound.height + (paddingY * 2),
-      });
-
-      parent.insertBefore(this, parent.firstChild);
-    })
 
   // Change the circle fill depending on whether it has children and is collapsed
   node.select("circle.nodeCircle")
