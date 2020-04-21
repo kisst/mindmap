@@ -584,6 +584,7 @@ function update(source) {
   nodeEnter
     .filter(d => !!d.attrs.background)
     .append('rect')
+    .style('opacity', 0)
     .each(function (d) {
       const parent = this.parentElement;
       const parentBound = parent.getBBox();
@@ -663,6 +664,10 @@ function update(source) {
   nodeUpdate.select("text")
     .style("fill-opacity", 1);
 
+  // Fade the background in
+  nodeUpdate.select("rect")
+    .style("opacity", 1);
+
   // Transition exiting nodes to the parent's new position.
   var nodeExit = node.exit().transition()
     .duration(duration)
@@ -673,6 +678,9 @@ function update(source) {
 
   nodeExit.select("circle")
     .attr("r", 0);
+
+  nodeExit.select("rect")
+    .style("opacity", 0);
 
   nodeExit.select("text")
     .style("fill-opacity", 0);
