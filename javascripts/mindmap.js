@@ -48,9 +48,12 @@ function getRandomId() {
  * Recurse through the input object, converting the map into an array, with
  * each key, value pairing translated into a single { name, children } object.
  */
-function normalize(parent) {
+function normalize(parent, path) {
   if (!parent) {
     return []
+  }
+  if (!path) {
+    path = []
   }
 
   // Ensure that the generated IDs are unique within the parent scope.
@@ -65,11 +68,14 @@ function normalize(parent) {
     // Recurse through the levels
     .map(([name, rawChildren]) => {
       const attrs = rawChildren?.__attrs || {};
+      const id = attrs.id || getNodeId(name);
+      const subPath = [...path, id]
       const child = {
         name,
         attrs,
-        id: attrs.id || getNodeId(name),
-        children: normalize(rawChildren),
+        id,
+        path: subPath,
+        children: normalize(rawChildren, subPath),
       };
 
       // TODO: Parse __attrs
@@ -167,7 +173,7 @@ var root;
 
 // size of the diagram
 var viewerWidth = $(document).width();
-var viewerHeight = $(document).height();
+var viewerHeight = $(document).height()-40;
 
 var tree = d3.layout.tree()
   .size([viewerHeight, viewerWidth]);
@@ -492,10 +498,17 @@ function click(d) {
       return;
     }
   }
-
   d = toggleChildren(d);
   update(d);
   centerNode(d);
+}
+
+function updatePath(source) {
+  // '/ ' + source.path.join(' / ')
+  var crumbs = source.path.map((step) => {
+      return "<a href=" + step + " title=" + '' + ">" + step + "</a>";
+    }).join(" / ");
+  document.getElementById('path-container').innerHTML = '/ ' + crumbs;
 }
 
 function update(source) {
@@ -503,6 +516,7 @@ function update(source) {
   // This prevents the layout looking squashed when new nodes are made visible or looking sparse when nodes are removed
   // This makes the layout more consistent.
   var levelWidth = [1];
+  updatePath(source);
   var childCount = function (level, n) {
 
     if (n.children && n.children.length > 0) {
