@@ -62,4 +62,5 @@ div.nav li a {
   text-align: center;
   padding: 7px;
   text-decoration: none;
+  cursor: zoom-in;
 }

@@ -506,7 +506,7 @@ function click(d) {
 function updatePath(source) {
   // '/ ' + source.path.join(' / ')
   var crumbs = source.path.map((step) => {
-    return "<li><a href='?root=" + step + "' title=''>" + step + "</a></li>";
+    return "<li><a href='?root=" + step + "' title='Focus on this'>" + step + "</a></li>";
     }).join("\n");
   document.getElementById('path-container').innerHTML = '<ul>' + crumbs + '</ul>';
 }
