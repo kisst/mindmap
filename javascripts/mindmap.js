@@ -506,9 +506,9 @@ function click(d) {
 function updatePath(source) {
   // '/ ' + source.path.join(' / ')
   var crumbs = source.path.map((step) => {
-      return "<a href=" + step + " title=" + '' + ">" + step + "</a>";
-    }).join(" / ");
-  document.getElementById('path-container').innerHTML = '/ ' + crumbs;
+    return "<li><a href='?root=" + step + "' title=''>" + step + "</a></li>";
+    }).join("\n");
+  document.getElementById('path-container').innerHTML = '<ul>' + crumbs + '</ul>';
 }
 
 function update(source) {
