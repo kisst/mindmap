@@ -504,9 +504,10 @@ function click(d) {
 }
 
 function updatePath(source) {
-  // '/ ' + source.path.join(' / ')
-  var crumbs = source.path.map((step) => {
-    return "<li><a href='?root=" + step + "' title='Focus on this'>" + step + "</a></li>";
+  var crumbs = source.path.map((step, index, arr) => {
+    // root = '' or root = 'sub.nodes.until.current.index'
+    let fullPath = (index > 0) ? [...arr].splice(1, index).join('.') : ''
+    return "<li><a href='?root=" + fullPath + "' title='Focus on " + step + "'>" + step + "</a></li>";
     }).join("\n");
   document.getElementById('path-container').innerHTML = '<ul>' + crumbs + '</ul>';
 }
