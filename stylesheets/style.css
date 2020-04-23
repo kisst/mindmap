@@ -1,9 +1,14 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
 .node {
   cursor: pointer;
 }
 
 .overlay{
-    background-color:#EEE;
+  background-color:#EEE;
 }
 
 .node circle {
@@ -13,7 +18,7 @@
 }
 
 .node text {
-  font-size:10px;
+  font-size: 10px;
   font-family: "FontAwesome", sans-serif;
 }
 
@@ -30,11 +35,11 @@
 }
 
 .ghostCircle.show{
-    display:block;
+  display: block;
 }
 
 .ghostCircle, .activeDrag .ghostCircle{
-     display: none;
+  display: none;
 }
 
 .hyperlink {
