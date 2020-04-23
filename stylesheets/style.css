@@ -46,3 +46,26 @@ body {
   fill: #0645ad;
   text-decoration: underline;
 }
+
+#path-container {
+  background-color: "EEEEEE";
+}
+div.nav > ul{
+  list-style-type: none;
+  display: inline;
+}
+div.nav li {
+  float: left;
+  
+}
+div.nav li::before {
+  content: "/";
+}
+div.nav li a {
+  display: inline;
+  color: black;
+  text-align: center;
+  padding: 7px;
+  text-decoration: none;
+  cursor: zoom-in;
+}
