@@ -506,10 +506,16 @@ function click(d) {
 function updatePath(source) {
   var crumbs = source.path.map((step, index, arr) => {
     // root = '' or root = 'sub.nodes.until.current.index'
-    let fullPath = (index > 0) ? [...arr].splice(1, index).join('.') : ''
-    return "<li><a href='?root=" + fullPath + "' title='Focus on " + step + "'>" + step + "</a></li>";
-    }).join("\n");
+    let path = (index > 0) ? [...arr].splice(1, index).join('.') : ''
+    return "<li><a href='#' onClick=setRoot(\"" + path + "\") title='Focus on " + step + "'>" + step + "</a></li>";
+  }).join("\n");
   document.getElementById('path-container').innerHTML = '<ul>' + crumbs + '</ul>';
+}
+
+function setRoot(path) {
+  let params = new URLSearchParams(window.location.search);
+  params.set('root', path.toString())
+  window.location.search = '?' + params.toString()
 }
 
 function update(source) {
