@@ -210,16 +210,6 @@ visit(treeData, function (d) {
 });
 
 
-// sort the tree according to the node names
-
-function sortTree() {
-  tree.sort(function (a, b) {
-    return b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1;
-  });
-}
-// Sort the tree initially incase the JSON isn't in a sorted order.
-sortTree();
-
 // TODO: Pan function, can be better implemented.
 
 function pan(domNode, direction) {
@@ -378,7 +368,6 @@ dragListener = d3.behavior.drag()
       }
       // Make sure that the node being added to is expanded so user can see added node is correctly moved
       expand(selectedNode);
-      sortTree();
       endDrag();
     } else {
       endDrag();
