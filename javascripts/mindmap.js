@@ -173,7 +173,7 @@ var root;
 
 // size of the diagram
 var viewerWidth = $(document).width();
-var viewerHeight = $(document).height()-40;
+var viewerHeight = $(document).height() - 40;
 
 var tree = d3.layout.tree()
   .size([viewerHeight, viewerWidth]);
@@ -209,16 +209,6 @@ visit(treeData, function (d) {
   return d.children && d.children.length > 0 ? d.children : null;
 });
 
-
-// sort the tree according to the node names
-
-function sortTree() {
-  tree.sort(function (a, b) {
-    return b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1;
-  });
-}
-// Sort the tree initially incase the JSON isn't in a sorted order.
-sortTree();
 
 // TODO: Pan function, can be better implemented.
 
@@ -378,7 +368,6 @@ dragListener = d3.behavior.drag()
       }
       // Make sure that the node being added to is expanded so user can see added node is correctly moved
       expand(selectedNode);
-      sortTree();
       endDrag();
     } else {
       endDrag();
