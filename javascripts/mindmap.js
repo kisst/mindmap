@@ -139,10 +139,16 @@ function parseTree(srcYaml) {
   return root;
 }
 
+const iconCache = {};
+
 /**
  * Attempt to return the character corresponding to a Font Awesome icon.
  */
 function getFontIcon(iconName) {
+  if (iconCache.hasOwnProperty(iconName)) {
+    return iconCache[iconName];
+  }
+
   // Create an element outside of the SVG - assign it the given FA class
   const tmpElem = document.createElement('i');
   tmpElem.classList.add('fa', `fa-${iconName}`);
@@ -160,7 +166,9 @@ function getFontIcon(iconName) {
     ? '61529'
     : content.charCodeAt(1);
 
-  return String.fromCharCode(charCode);
+  const icon = String.fromCharCode(charCode);
+  iconCache[iconName] = icon;
+  return icon;
 }
 
 const treeData = parseTree(getUrlParam('src_data', 'data.yaml'));
@@ -308,18 +316,6 @@ function toggleChildren(d) {
 
 function click(d) {
   if (d3.event.defaultPrevented) return; // click suppressed
-
-  const { hyperlink } = d?.attrs;
-
-  // If the node has a hyperlink, only toggle its children and ignore the link
-  // when the CTRL key is held down
-  if (hyperlink) {
-    if (d3.event.ctrlKey) {
-      event.preventDefault();
-    } else {
-      return;
-    }
-  }
   d = toggleChildren(d);
   update(d);
   centerNode(d);
@@ -382,6 +378,7 @@ function update(source) {
   // Enter any new nodes at the parent's previous position.
   var nodeEnter = node.enter().append("g")
     .attr("class", "node")
+    .attr('id', d => `node--${d.id}`)
     .attr("transform", function (d) {
       return "translate(" + source.y0 + "," + source.x0 + ")";
     })
@@ -452,9 +449,9 @@ function update(source) {
             target: '_blank',
             class: 'hyperlink',
           })
-          .text(text);
+          .text(getFontIcon('external-link'));
 
-        return anchor[0].outerHTML;
+        return `${anchor[0].outerHTML} ${text}`;
       }
 
       return text;
