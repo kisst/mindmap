@@ -28,11 +28,29 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 const urlParams = new URLSearchParams(window.location.search);
 const getUrlParam = (param, def) => urlParams.get(param) || def;
 
+const idMap = {};
+
 /**
- * Normalize the label, returning a string to be used as a unique identifier.
+ * Normalize the label, returning a globally unique identifier.
+ *
+ * In the case that more than one node has the same ID, we append an underscore
+ * followed by a number guaranteed to be unique. As underscores are replaced
+ * during the normalization process, the new ID is guaranteed to be unique.
  */
 function getNodeId(label) {
-  return label.toLowerCase().replace(/[^\w]/g, '-').replace(/\-{2,}/g, '-');
+  let id = label
+    .toLowerCase()
+    .replace(/[^\w]|_/g, '-')
+    .replace(/\-{2,}/g, '-');
+
+  if (idMap.hasOwnProperty(id)) {
+    const n = idMap[id] += 1
+    id = `${id}_${n}`;
+  } else {
+    idMap[id] = 0;
+  }
+
+  return id;
 }
 
 /**
@@ -56,9 +74,6 @@ function normalize(parent, path) {
     path = []
   }
 
-  // Ensure that the generated IDs are unique within the parent scope.
-  const ids = new Set();
-
   return Object
     // Transform the object into an array
     .entries(parent)
@@ -68,7 +83,7 @@ function normalize(parent, path) {
     // Recurse through the levels
     .map(([name, rawChildren]) => {
       const attrs = rawChildren?.__attrs || {};
-      const id = attrs.id || getNodeId(name);
+      const id = getNodeId(name);
       const subPath = [...path, id]
       const child = {
         name,
@@ -78,13 +93,6 @@ function normalize(parent, path) {
         children: normalize(rawChildren, subPath),
       };
 
-      // TODO: Parse __attrs
-
-      if (ids.has(child.id)) {
-        child.id = getRandomId();
-      }
-
-      ids.add(child.id);
       return child;
     });
 }
@@ -609,6 +617,7 @@ function update(source) {
     })
     .html(function (d) {
       let text = d.name;
+
       const { attrs } = d;
       const { hyperlink, icon } = attrs;
 
