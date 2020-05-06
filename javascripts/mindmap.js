@@ -381,15 +381,15 @@ function update(source) {
     .attr('id', d => `node--${d.id}`)
     .attr("transform", function (d) {
       return "translate(" + source.y0 + "," + source.x0 + ")";
-    })
-    .on('click', click);
+    });
 
   nodeEnter.append("circle")
     .attr('class', 'nodeCircle')
     .attr("r", 0)
     .style("fill", function (d) {
       return d._children ? "lightsteelblue" : "#fff";
-    });
+    })
+    .on('click', click);
 
   nodeEnter.append("text")
     .attr("x", function (d) {
@@ -404,14 +404,6 @@ function update(source) {
       return d.name;
     })
     .style("fill-opacity", 0);
-
-  // phantom node to give us mouseover in a radius around it
-  nodeEnter.append("circle")
-    .attr('class', 'ghostCircle')
-    .attr("r", 30)
-    .attr("opacity", 0.2) // change this to zero to hide the target area
-    .style("fill", "red")
-    .attr('pointer-events', 'mouseover')
 
   // Update the text to reflect whether node has children or not.
   node.select('text')
