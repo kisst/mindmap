@@ -3,9 +3,9 @@
 rich data formating convension:
 All formating items are under the item to be formated, under a key `__attrs`
 
- - icons - sub key-value with key `icon` ( pick from font awsome  )
- - alligment  - sub key-value with key `alligment`
- - font color - sub key-value with key `font-color`
+ - icons - sub key-value with key `icon` ( pick from [fontawesome](https://fontawesome.com/v4.7.0/icons/)  )
+ - alligment  - sub key-value with key `alligment` ( not ready )
+ - font color - sub key-value with key `color`
  - text background - sub key-value with key `background`
  - hyperlink - sub key-value with key `hyperlink`
 

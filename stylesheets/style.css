@@ -3,15 +3,12 @@ body {
   padding: 0;
 }
 
-.node {
-  cursor: pointer;
-}
-
 .overlay{
   background-color:#EEE;
 }
 
 .node circle {
+  cursor: pointer;
   fill: #fff;
   stroke: steelblue;
   stroke-width: 1.5px;
@@ -28,23 +25,8 @@ body {
   stroke-width: 1.5px;
 }
 
-.templink {
-  fill: none;
-  stroke: red;
-  stroke-width: 3px;
-}
-
-.ghostCircle.show{
-  display: block;
-}
-
-.ghostCircle, .activeDrag .ghostCircle{
-  display: none;
-}
-
 .hyperlink {
   fill: #0645ad;
-  text-decoration: underline;
 }
 
 #path-container {
@@ -59,7 +41,7 @@ div.nav li {
   
 }
 div.nav li::before {
-  content: "/";
+  content: ">";
 }
 div.nav li a {
   display: inline;
